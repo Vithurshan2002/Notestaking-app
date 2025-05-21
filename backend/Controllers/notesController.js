@@ -1,2 +1,2 @@
-const notesModel = require("../Server");
+const {notesModel} = require("../Server");
 

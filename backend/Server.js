@@ -1,14 +1,20 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+ const auth_user = require('./routes/authRoutes.js'); 
 const app = express();
-const authUser = require("./routes/authRoutes");
+const bp=require('body-parser');
+app.use(express.json());
+app.use(bp.urlencoded());
 
-app.use(authUser);
+ app.use(auth_user); 
 
-app.listen(process.env.PORT || 3000, () => [
-  console.log("Server is Listen in PortNumber ", process.env.PORT),
-]);
+app.use((error,req,res,next)=>{
+  console.log("errrodaa:--",error.message);
+});
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server is Listen in PortNumber ", process.env.PORT)
+});
 
 mongoose
   .connect("mongodb://localhost:27017/NoteApp")
@@ -32,10 +38,6 @@ const User = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  email: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
@@ -54,6 +56,9 @@ const notes = new mongoose.Schema({
 });
 
 const notesModel = mongoose.model("notes", notes);
-const usermodel = mongoose.model('user', User);
-module.exports = usermodel;
-module.exports=notesModel;
+const usermodel = mongoose.model("user", User);
+
+module.exports = {
+  usermodel,
+  notesModel,
+};

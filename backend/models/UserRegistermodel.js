@@ -1,2 +1,0 @@
-const usermodel = require("../Server");
-
