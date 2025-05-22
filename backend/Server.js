@@ -5,12 +5,13 @@ const mongoose = require("mongoose");
 const app = express();
 const bp=require('body-parser');
 app.use(express.json());
-app.use(bp.urlencoded());
+app.use(bp.urlencoded({ extended: true }));
 
  app.use(auth_user); 
 
 app.use((error,req,res,next)=>{
-  console.log("errrodaa:--",error.message);
+ console.log("Error: ", error.message);
+  res.status(500).json({ error: error.message });
 });
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is Listen in PortNumber ", process.env.PORT)
@@ -35,7 +36,7 @@ const User = new mongoose.Schema({
     required: true,
   },
   Contact: {
-    type: Number,
+    type: String,
     required: true,
   },
   password: {
@@ -55,7 +56,7 @@ const notes = new mongoose.Schema({
   date: Date,
 });
 
-const notesModel = mongoose.model("notes", notes);
+const notesModel = mongoose.model("note", notes);
 const usermodel = mongoose.model("user", User);
 
 module.exports = {
